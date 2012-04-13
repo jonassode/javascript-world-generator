@@ -1,0 +1,27 @@
+<html>
+<head>
+	<script type='text/javascript' src='map.js' ></script>
+
+</head>
+<body>
+	<font face="Monospace">
+	<div id="test_area">a </div>
+	</font>
+	<script>
+		var width = 100;
+		var height = 30;
+		var matrix = dungeon(width, height).matrix;
+		var text = "";
+		for( row = 0; row < height; row++) {
+                	for( col = 0; col < width; col++) {
+                        	text = text + matrix[row][col];
+	                }
+			text = text + "<br>";
+        	}
+
+		document.getElementById('test_area').innerHTML = text;
+	</script>
+</body>
+<html>
+
+
