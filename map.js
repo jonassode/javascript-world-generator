@@ -290,7 +290,7 @@ function Matrix() {
 		var possible_directions = this.get_dig_directions(pos);
 
 		if ( possible_directions.length === 0 ){
-				
+
 		} else {
 			var direction = possible_directions[random(0,possible_directions.length-1)];
 
@@ -300,6 +300,10 @@ function Matrix() {
 
 			// Dig next section, will keep digging untill it dies die
 			this.dig_corridor(p(row+(direction.row*2),col+(direction.col*2)));
+
+			// Check your self again
+			this.dig_corridor(pos);
+
 		}
 	}
 
