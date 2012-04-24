@@ -1,11 +1,11 @@
 
-var ROOM_MAX_HEIGHT = 21;
+var ROOM_MAX_HEIGHT = 9;
 var ROOM_MIN_HEIGHT = 3;
-var ROOM_MAX_WIDTH = 21;
-var ROOM_MIN_WIDTH = 3;
+var ROOM_MAX_WIDTH = 3;
+var ROOM_MIN_WIDTH = 9;
 
-var MIN_NO_ROOMS = 5;
-var MAX_NO_ROOMS = 10;
+var MIN_NO_ROOMS = 10;
+var MAX_NO_ROOMS = 50;
 
 var SPACE = '&nbsp;';
 var WALL = '&nbsp;';
