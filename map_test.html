@@ -6,10 +6,16 @@
 <body>
 	<font face="Monospace">
 	<div id="test_area">a </div>
+	Log:
+	<div id="text_area"></div>
 	</font>
 	<script>
-		var width = 100;
-		var height = 30;
+		function _log(text){
+			document.getElementById('text_area').innerHTML = text + "<br>" +document.getElementById('text_area').innerHTML;
+		}
+		
+		var width = 29;
+		var height = 29;
 		var matrix = dungeon(width, height).matrix;
 		var text = "";
 		for( row = 0; row < height; row++) {
