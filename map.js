@@ -7,13 +7,13 @@ var ROOM_MIN_WIDTH = 9;
 var MIN_NO_ROOMS = 10;
 var MAX_NO_ROOMS = 50;
 
-var SPACE = '&nbsp;';
-var WALL = '&nbsp;';
-var FLOOR = "<span style='background-color:silver;'>&nbsp;</span>";
+var SPACE = "#";
+var WALL = "X";
+var FLOOR = "'";
 var STAIR_UP = '%';
 var STAIR_DOWN = '\/';
 var BLOCKED = 'B'
-var CORRIDOR = "<span style='background-color:silver;'>&nbsp;</span>";
+var CORRIDOR = "C";
 
 
 function random(min, max) {
@@ -240,12 +240,98 @@ function Matrix() {
 
 	this.create_corridors = function(){
                 for( row = 0; row < this.matrix.length; row+=2) {
-                        for( col = 0; col <= this.matrix[row].length; col+=2) {
+                        for( col = 0; col < this.matrix[row].length; col+=2) {
 				if ( this.matrix[row][col] == SPACE ){
 	                                this.dig_corridor(p(row,col));
 				}
                         }
                 }
+	}
+
+	this.get_directions = function(pos){
+		var directions = new Array();
+		directions.push(p(pos.row-1, pos.col  ));
+		directions.push(p(pos.row+1, pos.col  ));
+		directions.push(p(pos.row  , pos.col-1));
+		directions.push(p(pos.row  , pos.col+1));
+		
+		return directions;
+	}
+
+	this.is_dead_end = function(pos){
+
+		var deadend = false;
+		if ( this.matrix[pos.row][pos.col] === FLOOR ){
+			var directions = this.get_directions(pos);
+
+
+			var roads = 0;
+			for( var i = 0; i<directions.length; i++){
+				direction = directions[i];
+				if ( 
+					direction.row < 0 ||
+					direction.row >= this.height ||
+					direction.col < 0 ||
+					direction.col >= this.width ||
+					this.matrix[direction.row][direction.col] != FLOOR
+				) {
+					roads++;			
+				}
+			}
+			if ( roads === 3 ){
+				deadend = true;		
+			}
+		}		
+		return deadend;
+	}
+
+	this.remove_end = function(pos){
+		this.matrix[pos.row][pos.col] = WALL;
+
+		var direction;
+		var directions = this.get_directions(pos);
+		for( var i = 0; i<directions.length; i++){
+			direction = directions[i];
+			if ( 
+				direction.row >= 0 &&
+				direction.row < this.height &&
+				direction.col >= 0 &&
+				direction.col < this.width &&
+				this.matrix[direction.row][direction.col] === FLOOR
+			) {
+				if ( this.is_dead_end(direction) ){
+					this.matrix[direction.row][direction.col] = WALL;
+					this.remove_end(direction);
+				}
+			}
+		}
+	}
+
+	this.remove_dead_ends = function(){
+		var r;
+                for( row = 0; row < this.matrix.length; row+=2) {
+                        for( col = 0; col < this.matrix[row].length; col+=2) {
+				var pos = p(row,col);
+				if ( this.is_dead_end(pos) ){
+					r = random(1,100);
+					if( r <= 80 ) {
+		                                this.remove_end(pos);
+					}
+				}
+                        }
+                }
+	}
+
+	this.place_entry = function(){
+                for( row = 0; row < this.matrix.length; row+=2) {
+                        for( col = 0; col < this.matrix[row].length; col+=2) {
+				var pos = p(row,col);
+				if ( this.is_dead_end(pos) ){
+					this.matrix[pos.row][pos.col] = STAIR_UP;
+					return null;
+				}
+                        }
+                }		
 	}
 
 	this.check = function(pos, rel, type){
@@ -327,8 +413,13 @@ function dungeon(widht, height)
 	var m = new Matrix();
 	m.create_matrix(width,height);
 	m.fill_matrix();
+	m.generate_room(p(23,23), false, 5, 5);
+	m.find_entrance(room(p(23,23),5,5));
+	m.matrix[25][25] = STAIR_DOWN;
 	m.generate_spread_rooms();
-	m.create_corridors();	
+	m.create_corridors();
+	m.place_entry();
+	m.remove_dead_ends();
 
 	return m;
 }
