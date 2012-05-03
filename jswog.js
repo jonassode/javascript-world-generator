@@ -34,7 +34,7 @@ var jswog = {
 		for( row = 0; row < array.length; row++) {
 			for( col = 0; col < array[row].length; col++) {
 			        if ( array[row][col] === type ){
-		                        return p(row,col);
+		                        return jswog.p(row,col);
 		                }
 		        }
 		}
@@ -44,7 +44,7 @@ var jswog = {
 		for( row = array.length-1; row > 0; row--) {
 		        for( col = array[row].length-1; col > 0; col--) {
 		                if ( array[row][col] === type ){
-		                        return p(row,col);
+		                        return jswog.p(row,col);
 		                }
 		        }
 		}
@@ -84,16 +84,16 @@ var jswog = {
 			var room_height;
 
 			var p;
-			this.generate_room(get_next_item(this.matrix, jswog.SPACE), true, 20, 10);
-			p = get_next_item(this.matrix,jswog.SPACE);
+			this.generate_room(jswog.get_next_item(this.matrix, jswog.SPACE), true, 20, 10);
+			p = jswog.get_next_item(this.matrix,jswog.SPACE);
 			while(p != null){
-				room_width = jswog.random(ROOM_MIN_WIDTH, ROOM_MAX_WIDTH);
-				room_height = jswog.random(ROOM_MIN_HEIGHT, ROOM_MAX_HEIGHT);
-				
+				room_width = jswog.random(jswog.ROOM_MIN_WIDTH, jswog.ROOM_MAX_WIDTH);
+				room_height = jswog.random(jswog.ROOM_MIN_HEIGHT, jswog.ROOM_MAX_HEIGHT);
+
 				this.generate_room(p, false, room_width, room_height)
-				p = get_next_item(this.matrix, jswog.SPACE);
+				p = jswog.get_next_item(this.matrix, jswog.SPACE);
 			}
-			p = get_last_item(this.matrix, jswog.FLOOR);
+			p = jswog.get_last_item(this.matrix, jswog.FLOOR);
 			this.matrix[p.row][p.col] = jswog.STAIR_DOWN;
 
 		}	
@@ -124,10 +124,10 @@ var jswog = {
 
 			// Check room width and height to fill screen
 			if ( end_col - (start.col + room_width) <= 2 ){
-	//			room_width = end_col - start.col;
+				room_width = end_col - start.col;
 			}
 		        if ( end_row - (start.row + room_height) <= 2 ){
-	//                        room_height = end_row - start.row;
+	                        room_height = end_row - start.row;
 		        }
 
 		        for( row = start.row; row < (start.row + room_height); row++) {
@@ -397,7 +397,7 @@ var jswog = {
 		return { row: p.row, col: p.col, width: width, height:height };
 	},
 
-	dungeon: function(widht, height){
+	dungeon: function(width, height){
 		var m = new jswog.World();
 		m.create_matrix(width,height);
 		m.fill_matrix();
@@ -414,7 +414,7 @@ var jswog = {
 
 
 
-	house: function(widht, height){
+	house: function(width, height){
 		var m = new jswog.World();
 		m.create_matrix(width,height);
 		m.fill_matrix();
