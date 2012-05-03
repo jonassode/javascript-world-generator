@@ -30,34 +30,21 @@ var jswog = {
 		return { row: row, col: col };
 	},
 
-	Position: function(){
-		this.col = 0;
-		this.row = 0;
-	},
-
 	get_next_item: function(array, type){
-		var p = new Position();
-	
 		for( row = 0; row < array.length; row++) {
 			for( col = 0; col < array[row].length; col++) {
 			        if ( array[row][col] === type ){
-					p.row = row;
-					p.col = col; 
-		                        return p;
+		                        return p(row,col);
 		                }
 		        }
 		}
 	},
 
 	get_last_item: function(array, type){
-		var p = new Position();
-
 		for( row = array.length-1; row > 0; row--) {
 		        for( col = array[row].length-1; col > 0; col--) {
 		                if ( array[row][col] === type ){
-		                        p.row = row;
-		                        p.col = col;
-		                        return p;
+		                        return p(row,col);
 		                }
 		        }
 		}
