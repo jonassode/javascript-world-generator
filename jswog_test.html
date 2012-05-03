@@ -24,14 +24,14 @@
 		
 		var width = 29;
 		var height = 29;
-		var matrix = dungeon(width, height).matrix;
+		var matrix = jswog.dungeon(width, height).matrix;
 		var text = "<table border='0'>";
 		for( row = 0; row < height; row++) {
 			text = text + "<tr>"
                 	for( col = 0; col < width; col++) {
-				if ( matrix[row][col] === FLOOR ) {
+				if ( matrix[row][col] === jswog.FLOOR ) {
 	                        	text = text + "<td><div class='square' style='background-color:silver;' ></div></td>";
-				} else if ( matrix[row][col] === STAIR_UP || matrix[row][col] === STAIR_DOWN ) {
+				} else if ( matrix[row][col] === jswog.STAIR_UP || matrix[row][col] === jswog.STAIR_DOWN ) {
 	                        	text = text + "<td><div class='square' style='background-color:99CCFF;' ></div></td>";
 				} else {
 	                        	text = text + "<td>&nbsp;</td>";
