@@ -51,7 +51,7 @@ var jswog = {
 	},
 
 
-	Matrix: function() {
+	World: function() {
 		this.matrix = {};
 		this.width = 0;
 		this.height= 0;
@@ -398,7 +398,7 @@ var jswog = {
 	},
 
 	dungeon: function(widht, height){
-		var m = new jswog.Matrix();
+		var m = new jswog.World();
 		m.create_matrix(width,height);
 		m.fill_matrix();
 		m.generate_room(jswog.p(23,23), false, 5, 5);
@@ -415,7 +415,7 @@ var jswog = {
 
 
 	house: function(widht, height){
-		var m = new jswog.Matrix();
+		var m = new jswog.World();
 		m.create_matrix(width,height);
 		m.fill_matrix();
 		m.generate_rooms();
