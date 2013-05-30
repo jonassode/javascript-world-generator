@@ -1,0 +1,117 @@
+<html>
+<head>
+	<script type='text/javascript' src='../javascript-lineofsight/jslos.js' ></script>
+	<script type='text/javascript' src='jswog.js' ></script>
+
+
+</head>
+<body>
+	<font face="Monospace">
+	<div id="test_area" style="border: 3px silver solid; float:left;">a </div>
+	<div id="log_area" >b </div>
+
+	<script>
+
+	var sq = function(minrow,mincol,maxrow,maxcol){
+		return {minrow:minrow,maxrow:maxrow,mincol:mincol,maxcol:maxcol};
+	}
+
+	var set_square = function(arr, square, c1, c2, c3, c4){
+		arr[square.minrow][square.mincol] == "-" ? arr[square.minrow][square.mincol] = Math.round(c1) : null;
+		arr[square.minrow][square.maxcol] == "-" ? arr[square.minrow][square.maxcol] = Math.round(c2) : null;
+		arr[square.maxrow][square.mincol] == "-" ? arr[square.maxrow][square.mincol] = Math.round(c3) : null;
+		arr[square.maxrow][square.maxcol] == "-" ? arr[square.maxrow][square.maxcol] = Math.round(c4) : null;
+	}
+
+	// Calculate Sub Square
+	var cal_sub_square = function(arr, parent, sub){
+		var c1, c2, c3, c4;
+		
+		sub.generation = parent.generation + 1;
+		_log(sub.minrow + ", " + sub.mincol + " - " + sub.maxrow + ", " + sub.maxcol + " generation: " +  sub.generation);	
+
+		// Get Parent Values
+		var p1, p2, p3, p4;
+		p1 = arr[parent.minrow][parent.mincol];
+		p2 = arr[parent.minrow][parent.maxcol];
+		p3 = arr[parent.maxrow][parent.mincol];
+		p4 = arr[parent.maxrow][parent.maxcol];
+
+		c1 = p1;
+		c2 = ((p1+p3)/2);
+		c3 = ((p1+p2)/2);
+		c4 = ((p1+p2+p3+p4)/4);
+
+		set_square(arr, sub, c1, c2, c3, c4);
+		split_sqaure(arr, sub);
+	}
+
+	var split_sqaure = function(arr, square){
+		var minrow, mincol, maxrow, maxcol, halfrow, halfcol;
+		minrow  = square.minrow;
+		mincol  = square.mincol;
+		maxrow  = square.maxrow; 
+		maxcol  = square.maxcol;
+		halfrow = Math.floor((maxrow + minrow)/2);
+		halfcol = Math.floor((maxcol + mincol)/2);
+
+//		_log(minrow +", "+ mincol +", "+ maxrow +", "+ maxrow +", "+ halfrow +", "+ halfcol);
+
+		if ( halfrow > minrow ){
+			cal_sub_square(arr, square, sq(minrow,  mincol,  halfrow, halfcol ));
+			cal_sub_square(arr, square, sq(minrow,  halfcol, halfrow, maxcol  ));
+			cal_sub_square(arr, square, sq(halfrow, mincol,  maxrow,  halfcol ));
+			cal_sub_square(arr, square, sq(halfrow, halfcol, maxrow,  maxcol  ));
+		} else {
+			//_log("-    ending calculation");
+		}
+
+	}
+
+	var _log = function(text){
+		LOG = LOG + text + "<br>";
+	}
+
+	var text = "<table>";
+	var arr = new Array();
+	var width = 9;
+	var height = 9;
+	arr = jslos.create_matrix(width,height);
+
+	for (var i=0;i<width;i++){
+		for (var j=0;j<height;j++){
+			arr[i][j] = "-";
+		}
+	}
+
+	start_square = sq(0,0,width-1,height-1);
+	start_square.generation = 1;
+
+	// World Generation
+	var LOG = "";
+
+	set_square(arr, start_square, 0, 20, 40, 80);
+	split_sqaure(arr, start_square);
+
+	
+	for (var i=0;i<width;i++){
+		text = text + "<tr>";
+
+		for (var j=0;j<height;j++){
+			text = text + "<td style='width:40;height:40;background-color:silver;'>"+arr[i][j] + "</td>";
+		}
+		text = text + "</tr>";
+
+	}
+
+	text = text + "</table>";
+
+	document.getElementById('test_area').innerHTML = text;
+	document.getElementById('log_area').innerHTML = "LOG:<br>" + LOG;
+
+	</script>
+
+
+</body>
+<html>
+

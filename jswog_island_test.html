@@ -1,0 +1,79 @@
+<html>
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script type='text/javascript' src='jswog.js' ></script>
+	<script type='text/javascript' src='jswog_island.js' ></script>
+	<script type='text/javascript' src='../javascript-matrix/jsmatrix.js' ></script>
+	<style type="text/css">
+		.square {
+		    float: left;
+		    width:20px;
+		    height:20px;
+		    display:block;
+		    overflow:hidden;
+		}
+	</style>
+
+</head>
+<body>
+	<div id="test_area">a</div>
+	<script>
+
+		function paint(){		
+
+			var width = 20;
+			var height = 20;
+			var matrix;
+			matrix = jswog_island.island(width, height).matrix;
+
+			var size = 10;
+			var big_width = width * size;
+			var big_height = height * size;
+			var big_matrix = jsmatrix.matrix2d(big_height, big_width);
+
+			var irow = 0
+			for( var row = 0; row < height; row++) {
+		        	for( var col = 0; col < width; col++) {
+					var cell = matrix[row][col];
+					var startrow = row * size;
+					var startcol = col * size;
+					
+					for ( var i = startrow; i < (startrow + size); i++){
+						for ( var j = startcol; j < (startcol + size); j++){
+							big_matrix.get_cell(i,j).set_item('background',cell);
+						}
+					}
+				}
+			}
+
+			var text = "<table border='0'>";
+			for( row = 0; row < big_height; row++) {
+				text = text + "<tr>"
+		        	for( col = 0; col < big_width; col++) {
+					var bg = '#C0C0C0'
+					var cell = big_matrix.get_cell(row,col).items()[0];
+					if ( cell == jswog_island.WATER ) {
+						bg = '#6699FF'; 
+					}
+					if ( cell == jswog_island.COAST ) {
+						bg = '#66CCCC'; 
+					}
+					if ( cell == jswog_island.GROUND ) {
+						bg = '#66CC66';
+					}
+		                	text = text + "<td><div class='square' style='background-color:"+bg+"; border:1px dashed gray;' >"+cell+"</div></td>";
+			        }
+				text = text + "</tr>";
+			}
+			text = text + "</table>";
+
+			document.getElementById('test_area').innerHTML = text;
+			return big_matrix;
+		}
+
+		var x = paint();
+	</script>
+</body>
+<html>
+
+
