@@ -1,4 +1,3 @@
-
 var jswog = {
 
 	ROOM_MAX_HEIGHT: 9,
@@ -71,7 +70,7 @@ var jswog = {
 		}
 
 		this.fill_matrix = function(){
-		        // Fill Array with zeros
+		        // Fill Array with space
 		        for( row = 0; row < this.matrix.length; row++) {
 		                for( col = 0; col < this.matrix[row].length; col++) {
 		                        this.matrix[row][col] = jswog.SPACE;
@@ -98,7 +97,7 @@ var jswog = {
 
 		}	
 
-		this.generate_room = function(start, entry, room_width, room_height){
+	 	this.generate_room = function(start, entry, room_width, room_height){
 			if ( start === null ){
 				return null;
 			}
@@ -411,8 +410,6 @@ var jswog = {
 
 		return m;
 	},
-
-
 
 	house: function(width, height){
 		var m = new jswog.World();
